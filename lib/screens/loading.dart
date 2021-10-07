@@ -21,6 +21,8 @@ class _LoadingState extends State<Loading> {
   void _loadUserInfo() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     _msisdn = prefs.getString('msisdn') ?? "";
+    await Future.delayed(const Duration(seconds: 2));
+
     if (_msisdn == "") {
       Navigator.pushNamedAndRemoveUntil(
           context, '/login', ModalRoute.withName('/login'));

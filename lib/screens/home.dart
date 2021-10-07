@@ -20,6 +20,10 @@ class _HomeState extends State<Home> {
         context, '/login', ModalRoute.withName('/login'));
   }
 
+  void showPopup() {
+
+  }
+
   @override
   Widget build(BuildContext context) {
     try {

@@ -12,6 +12,8 @@ class Login extends StatefulWidget {
 class _LoginState extends State<Login> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
+  bool _isProcessing = false;
+
   late String _msisdn;
   String? _config; //TODO
 
@@ -23,6 +25,10 @@ class _LoginState extends State<Login> {
   }
 
   void _handleSubmitted() async {
+    setState(() {
+      _isProcessing = true;
+    });
+    await Future.delayed(const Duration(seconds: 1));
     if (_formKey.currentState!.validate()) {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       print(_msisdn);
@@ -30,6 +36,15 @@ class _LoginState extends State<Login> {
       Navigator.pushReplacementNamed(context, '/home',
           arguments: {'msisdn': _msisdn});
     }
+    _isProcessing = false;
+  }
+
+  @override
+  void initState() {
+    setState(() {
+      super.initState();
+      _isProcessing = false;
+    });
   }
 
   @override
@@ -63,8 +78,8 @@ class _LoginState extends State<Login> {
                     child: TextFormField(
                       textAlign: TextAlign.center,
                       decoration: const InputDecoration(
-                          labelText: "Nhập số điện thoại",
-                          fillColor: Colors.white,
+                        labelText: "Nhập số điện thoại",
+                        fillColor: Colors.white,
                       ),
                       keyboardType: TextInputType.phone,
                       inputFormatters: <TextInputFormatter>[
@@ -85,7 +100,13 @@ class _LoginState extends State<Login> {
                     onPressed: () {
                       _handleSubmitted();
                     },
-                    child: const Text("Đăng nhập"),
+                    child: (_isProcessing
+                        ? const SizedBox(
+                            child: CircularProgressIndicator(color: Colors.white),
+                            height: 20.0,
+                            width: 20.0,
+                          )
+                        : const Text("Đăng nhập")),
                     style: ButtonStyle(
                         backgroundColor: MaterialStateProperty.all(Colors.red),
                         elevation: MaterialStateProperty.all(0),
