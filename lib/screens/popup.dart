@@ -60,7 +60,7 @@ class DiscountInfo extends StatelessWidget {
                     style: TextStyle(fontSize: 15),
                   ),
                   onPressed: () {
-                    //TODO
+                    //TODO: trackpoint
                     Navigator.pop(context);
                   },
                 ),

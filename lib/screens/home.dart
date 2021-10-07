@@ -14,13 +14,13 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   Map data = {};
-  final User _user = User(
-      name: "ViettelPay", balance: 100000, email: "viettelpay@digital.vn");
+  final User _user =
+      User(name: "ViettelPay", balance: 100000, email: "viettelpay@digital.vn");
   bool _shouldPopUpBeShown = true; // TODO
 
   void _handleLogout() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.remove("username");
+    prefs.remove("msisdn");
     Navigator.pushNamedAndRemoveUntil(
         context, '/login', ModalRoute.withName('/login'));
   }
@@ -48,33 +48,62 @@ class _HomeState extends State<Home> {
     await Future.delayed(const Duration(seconds: 2));
     showGeneralDialog(
         barrierLabel: "Barrier",
-        barrierDismissible: true,
+        barrierDismissible: false,
         context: context,
         pageBuilder: (_, __, ___) {
-          return Align(
-            alignment: Alignment.center,
-            child: Container(
-              height: 350,
-              child: TextButton(
-                child: Image.asset('assets/popup.png'),
-                onPressed: () {
-                  showPopup();
-                },
+          return WillPopScope(
+            onWillPop: () => Future.value(false),
+            child: Align(
+              alignment: Alignment.center,
+              child: Container(
+                height: 450,
+                child: Column(children: [
+                  Expanded(
+                    flex: 8,
+                    child: TextButton(
+                      child: Image.asset('assets/popup.png'),
+                      onPressed: () {
+                        // TODO: trackpoint
+                        showPopup();
+                      },
+                    ),
+                  ),
+                  Expanded(
+                    flex: 1,
+                    child: ElevatedButton(
+                      style: TextButton.styleFrom(
+                        backgroundColor: Colors.red[900],
+                        primary: Colors.white,
+                        elevation: 0,
+                      ),
+                      onPressed: () {
+                        // TODO: trackpoint
+                        Navigator.of(context, rootNavigator: true).pop();
+                      },
+                      child: const Text(
+                        'Đóng',
+                        style: TextStyle(fontSize: 15),
+                      ),
+                    ),
+                  ),
+                ]),
+                margin: const EdgeInsets.only(bottom: 50, left: 12, right: 12),
               ),
-              margin: const EdgeInsets.only(bottom: 50, left: 12, right: 12),
             ),
           );
         });
-    // showPopup();
   }
 
   @override
   Widget build(BuildContext context) {
     try {
+      //TODO: catch config
       data = ModalRoute.of(context)!.settings.arguments as Map;
-      print(data['msisdn']);
+      print(data);
       _user.msisdn = data['msisdn'];
+      _user.configs = data['configs'];
     } catch (ex) {
+      print('here');
       print(ex);
       _user.msisdn = "";
     }

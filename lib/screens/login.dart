@@ -1,5 +1,9 @@
+import 'dart:convert';
+
+import 'package:exp_demo/models/user.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:http/http.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Login extends StatefulWidget {
@@ -15,12 +19,24 @@ class _LoginState extends State<Login> {
   bool _isProcessing = false;
 
   late String _msisdn;
-  String? _config; //TODO
+  Map<String, dynamic>? _config; //TODO
 
   bool _isPhoneNoValid(String? phoneNo) {
     if (phoneNo == null) return false;
     final regExp = RegExp(r'^(84|0[3|5|7|8|9])+([0-9]{8})\b');
     return regExp.hasMatch(phoneNo);
+  }
+
+  Future<Map<String, dynamic>> _getEXPConfigs(String msisdn) async {
+    try {
+      var response = await get(Uri.parse('')); //TODO: add url
+      Map<String, dynamic> data = jsonDecode(response.body); // json to map
+      print('get configs: $data');
+      return data;
+    } catch (ex) {
+      print('caught error $ex');
+      return {};
+    }
   }
 
   void _handleSubmitted() async {
@@ -29,12 +45,17 @@ class _LoginState extends State<Login> {
     });
     await Future.delayed(const Duration(seconds: 1));
     if (_formKey.currentState!.validate()) {
-      SharedPreferences prefs = await SharedPreferences.getInstance();
       print(_msisdn);
+      SharedPreferences prefs = await SharedPreferences.getInstance();
       prefs.setString("msisdn", _msisdn);
+
+      // TODO: get config
+      await _getEXPConfigs(_msisdn);
+
       Navigator.pushReplacementNamed(context, '/home', arguments: {
-        'msisdn': _msisdn
-      }); // TODO: pass config
+        'msisdn': _msisdn,
+        // TODO: pass config
+      });
     }
     setState(() {
       _isProcessing = false;
@@ -68,8 +89,8 @@ class _LoginState extends State<Login> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Image.asset('assets/viettelpay.png', height: 200,),
-                  const SizedBox(height: 100,),
+                  Image.asset('assets/viettelpay.png', height: 200),
+                  const SizedBox(height: 100),
                   Theme(
                     data: Theme.of(context).copyWith(primaryColor: Colors.red),
                     child: TextFormField(
@@ -99,10 +120,12 @@ class _LoginState extends State<Login> {
                   ElevatedButton(
                     onPressed: () {
                       _handleSubmitted();
+                      // TODO: trackpoint
                     },
                     child: (_isProcessing
                         ? const SizedBox(
-                            child: CircularProgressIndicator(color: Colors.white),
+                            child:
+                                CircularProgressIndicator(color: Colors.white),
                             height: 20.0,
                             width: 20.0,
                           )
@@ -110,12 +133,11 @@ class _LoginState extends State<Login> {
                     style: ButtonStyle(
                         backgroundColor: MaterialStateProperty.all(Colors.red),
                         elevation: MaterialStateProperty.all(0),
-                        padding: MaterialStateProperty.all(const EdgeInsets.fromLTRB(50, 15, 50, 15)),
+                        padding: MaterialStateProperty.all(
+                            const EdgeInsets.fromLTRB(50, 15, 50, 15)),
                         shape: MaterialStateProperty.all(RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(15.0),
-                            side: const BorderSide(color: Colors.red)
-                        ))
-                    ),
+                            side: const BorderSide(color: Colors.red)))),
                   )
                 ],
               ),

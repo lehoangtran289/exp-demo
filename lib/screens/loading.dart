@@ -28,7 +28,7 @@ class _LoadingState extends State<Loading> {
           context, '/login', ModalRoute.withName('/login'));
     } else {
       Navigator.pushNamedAndRemoveUntil(
-          context, '/login', ModalRoute.withName('/login'));
+          context, '/home', ModalRoute.withName('/home'));
     }
   }
 
