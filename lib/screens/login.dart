@@ -19,8 +19,7 @@ class _LoginState extends State<Login> {
 
   bool _isPhoneNoValid(String? phoneNo) {
     if (phoneNo == null) return false;
-    final regExp =
-        RegExp(r'^(\+\d{1,2}\s)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}$');
+    final regExp = RegExp(r'^(84|0[3|5|7|8|9])+([0-9]{8})\b');
     return regExp.hasMatch(phoneNo);
   }
 
@@ -33,10 +32,13 @@ class _LoginState extends State<Login> {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       print(_msisdn);
       prefs.setString("msisdn", _msisdn);
-      Navigator.pushReplacementNamed(context, '/home',
-          arguments: {'msisdn': _msisdn});
+      Navigator.pushReplacementNamed(context, '/home', arguments: {
+        'msisdn': _msisdn
+      }); // TODO: pass config
     }
-    _isProcessing = false;
+    setState(() {
+      _isProcessing = false;
+    });
   }
 
   @override
@@ -66,25 +68,23 @@ class _LoginState extends State<Login> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Image.asset(
-                    'assets/viettelpay.png',
-                    height: 200,
-                  ),
-                  const SizedBox(
-                    height: 100,
-                  ),
+                  Image.asset('assets/viettelpay.png', height: 200,),
+                  const SizedBox(height: 100,),
                   Theme(
                     data: Theme.of(context).copyWith(primaryColor: Colors.red),
                     child: TextFormField(
-                      textAlign: TextAlign.center,
-                      decoration: const InputDecoration(
-                        labelText: "Nhập số điện thoại",
-                        fillColor: Colors.white,
-                      ),
                       keyboardType: TextInputType.phone,
                       inputFormatters: <TextInputFormatter>[
                         FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
                       ],
+                      textAlign: TextAlign.center,
+                      cursorColor: Colors.red,
+                      decoration: const InputDecoration(
+                          labelText: "Nhập số điện thoại",
+                          focusedBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: Colors.red),
+                          ),
+                          labelStyle: TextStyle(color: Colors.grey)),
                       onChanged: (String? value) {
                         _msisdn = value!;
                       },
@@ -110,11 +110,12 @@ class _LoginState extends State<Login> {
                     style: ButtonStyle(
                         backgroundColor: MaterialStateProperty.all(Colors.red),
                         elevation: MaterialStateProperty.all(0),
-                        padding: MaterialStateProperty.all(
-                            const EdgeInsets.fromLTRB(50, 15, 50, 15)),
+                        padding: MaterialStateProperty.all(const EdgeInsets.fromLTRB(50, 15, 50, 15)),
                         shape: MaterialStateProperty.all(RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(15.0),
-                            side: const BorderSide(color: Colors.red)))),
+                            side: const BorderSide(color: Colors.red)
+                        ))
+                    ),
                   )
                 ],
               ),
