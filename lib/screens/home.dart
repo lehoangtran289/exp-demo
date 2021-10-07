@@ -153,9 +153,9 @@ class _HomeState extends State<Home> {
     // show popup
     if (_shouldPopUpBeShown) {
       showDialog();
-      // setState(() {
-      //   _shouldPopUpBeShown = false;
-      // });
+      setState(() {
+        _shouldPopUpBeShown = false;
+      });
     }
 
     return Scaffold(
