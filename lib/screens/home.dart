@@ -1,4 +1,5 @@
 import 'package:exp_demo/models/user.dart';
+import 'package:exp_demo/screens/popup.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -13,8 +14,8 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   Map data = {};
-  User _user =
-      User(name: "ViettelPay", balance: 100000, email: "viettelpay@digital.vn");
+  final User _user = User(
+      name: "ViettelPay", balance: 100000, email: "viettelpay@digital.vn");
   bool _shouldPopUpBeShown = true; // TODO
 
   void _handleLogout() async {
@@ -32,84 +33,12 @@ class _HomeState extends State<Home> {
           height: 500,
           color: const Color(0xFF737373),
           child: Container(
-            decoration: const BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(20.0),
-                    topRight: Radius.circular(20.0))),
-            child: Container(
-                decoration: const BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(20.0),
-                        topRight: Radius.circular(20.0))),
-                child: Scaffold(
-                  body: SingleChildScrollView(
-                    child: Padding(
-                      padding: const EdgeInsets.fromLTRB(20, 30, 20, 20),
-                      child: RichText(
-                        text: const TextSpan(
-                          style: TextStyle(
-                              color: Colors.black, height: 1.5, fontSize: 16),
-                          children: <TextSpan>[
-                            TextSpan(
-                                text:
-                                    'Khuyến mãi tít mù - Lướt mạng vù vù chỉ với 1.000đ',
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 15.5)),
-                            TextSpan(
-                                text: '\nSiêu ưu đãi đã đổ bộ ViettelPay',
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold, fontSize: 16)),
-                            TextSpan(text: ' \n'),
-                            TextSpan(
-                                text: '\n- Dành tặng khách hàng thực hiện '
-                                    'giao dịch thanh toán trên ViettelPay (thuộc '
-                                    'tập khách hàng được Viettel gửi thông báo tham gia chương trình khuyến mãi) \n'
-                                    '- Nhận ngay gói voucher mua data trên '
-                                    'ViettelPay #Giá_1000đ dành cho gói ST5K & '
-                                    'ST15K\n'),
-                            TextSpan(
-                                text: '- Thời gian chương trình:',
-                                style: TextStyle(fontWeight: FontWeight.bold)),
-                            TextSpan(text: ' tới 10/02/2022'),
-                            TextSpan(
-                                text:
-                                    '\n\nChi tiết vui lòng xem tại: https://1.viettelpay.vn/g1k'),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                  bottomNavigationBar: BottomAppBar(
-                    child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 12),
-                            child: ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                primary: Colors.red,
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(28.0)),
-                                minimumSize: const Size(250, 50),
-                              ),
-                              child: const Text(
-                                'Trải nghiệm ngay',
-                                style: TextStyle(fontSize: 15),
-                              ),
-                              onPressed: () {
-                                //TODO
-                                Navigator.pop(context);
-                              },
-                            ),
-                          ),
-                        ]),
-                  ),
-                )),
-          ),
+              decoration: const BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(20.0),
+                      topRight: Radius.circular(20.0))),
+              child: const DiscountInfo()),
         );
       },
     );
@@ -191,9 +120,7 @@ class _HomeState extends State<Home> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Image.asset('assets/bannervtp.png'),
-              const SizedBox(
-                height: 50,
-              ),
+              const SizedBox(height: 50),
               Row(children: [
                 const Expanded(
                   flex: 2,
