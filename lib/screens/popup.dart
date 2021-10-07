@@ -62,6 +62,13 @@ class DiscountInfo extends StatelessWidget {
                   onPressed: () {
                     //TODO: trackpoint
                     Navigator.pop(context);
+                    showDialog<String>(
+                      context: context,
+                      barrierDismissible: true,
+                      builder: (BuildContext context) => const AlertDialog(
+                        content: Text('Trải nghiệm thành công :D'),
+                      ),
+                    );
                   },
                 ),
               ),

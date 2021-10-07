@@ -50,7 +50,7 @@ class _HomeState extends State<Home> {
         barrierLabel: "Barrier",
         barrierDismissible: false,
         context: context,
-        pageBuilder: (_, __, ___) {
+        pageBuilder: (context, __, ___) {
           return WillPopScope(
             onWillPop: () => Future.value(false),
             child: Align(
