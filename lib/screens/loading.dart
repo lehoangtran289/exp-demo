@@ -3,7 +3,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Loading extends StatefulWidget {
-  const  Loading({Key? key}) : super(key: key);
+  const Loading({Key? key}) : super(key: key);
 
   @override
   _LoadingState createState() => _LoadingState();
@@ -27,8 +27,10 @@ class _LoadingState extends State<Loading> {
       Navigator.pushNamedAndRemoveUntil(
           context, '/login', ModalRoute.withName('/login'));
     } else {
+      print('loading screen: msisdn exists $_msisdn');
       Navigator.pushNamedAndRemoveUntil(
-          context, '/home', ModalRoute.withName('/home'));
+          context, '/home', ModalRoute.withName('/home'),
+          arguments: {'msisdn': _msisdn});
     }
   }
 

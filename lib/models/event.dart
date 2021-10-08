@@ -20,7 +20,8 @@ class Event {
   String? osVersion;
   String? ipAddr;
 
-  Event({required this.objectName,
+  Event(
+      {required this.objectName,
       required this.objectType,
       required this.eventSrc,
       required this.action,
@@ -34,6 +35,4 @@ class Event {
       this.os,
       this.osVersion,
       this.ipAddr});
-
-
 }

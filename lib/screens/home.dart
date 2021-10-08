@@ -1,3 +1,4 @@
+import 'package:exp_demo/common/utils.dart';
 import 'package:exp_demo/models/user.dart';
 import 'package:exp_demo/screens/popup.dart';
 import 'package:flutter/cupertino.dart';
@@ -26,6 +27,7 @@ class _HomeState extends State<Home> {
   }
 
   void showPopup() {
+    print(data['msisdn']);
     showModalBottomSheet<void>(
       context: context,
       builder: (BuildContext context) {
@@ -38,7 +40,7 @@ class _HomeState extends State<Home> {
                   borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(20.0),
                       topRight: Radius.circular(20.0))),
-              child: const DiscountInfo()),
+              child: DiscountInfo(_user.msisdn)),
         );
       },
     );
@@ -63,7 +65,8 @@ class _HomeState extends State<Home> {
                     child: TextButton(
                       child: Image.asset('assets/popup.png'),
                       onPressed: () {
-                        // TODO: trackpoint
+                        // trackpoint
+                        trackEvent('exp_popup', 'BUTTON', 'USER', 'CLICK');
                         showPopup();
                       },
                     ),
@@ -77,7 +80,8 @@ class _HomeState extends State<Home> {
                         elevation: 0,
                       ),
                       onPressed: () {
-                        // TODO: trackpoint
+                        // trackpoint
+                        trackEvent('exp_exit_popup', 'BUTTON', 'USER', 'CLICK');
                         Navigator.of(context, rootNavigator: true).pop();
                       },
                       child: const Text(
@@ -100,10 +104,11 @@ class _HomeState extends State<Home> {
       //TODO: catch config
       data = ModalRoute.of(context)!.settings.arguments as Map;
       print(data);
-      _user.msisdn = data['msisdn'];
-      _user.configs = data['configs'];
+      setState(() {
+        _user.msisdn = data['msisdn'];
+      });
+      // _user.configs = data['configs'];
     } catch (ex) {
-      print('here');
       print(ex);
       _user.msisdn = "";
     }

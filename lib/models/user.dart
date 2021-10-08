@@ -1,6 +1,4 @@
-import 'dart:convert';
 
-import 'package:http/http.dart' as http;
 
 class User {
   late String msisdn;
@@ -9,8 +7,5 @@ class User {
   late String email;
   late String configs;
 
-  User(
-      {required this.name,
-      required this.balance,
-      required this.email});
+  User({required this.name, required this.balance, required this.email});
 }

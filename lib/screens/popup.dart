@@ -1,7 +1,10 @@
+import 'package:exp_demo/common/utils.dart';
 import 'package:flutter/material.dart';
 
 class DiscountInfo extends StatelessWidget {
-  const DiscountInfo({Key? key}) : super(key: key);
+  final String msisdn;
+
+  DiscountInfo(this.msisdn);
 
   @override
   Widget build(BuildContext context) {
@@ -16,11 +19,11 @@ class DiscountInfo extends StatelessWidget {
                 TextSpan(
                     text: 'Khuyến mãi tít mù - Lướt mạng vù vù chỉ với 1.000đ',
                     style:
-                    TextStyle(fontWeight: FontWeight.bold, fontSize: 15.5)),
+                        TextStyle(fontWeight: FontWeight.bold, fontSize: 15.5)),
                 TextSpan(
                     text: '\nSiêu ưu đãi đã đổ bộ ViettelPay',
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold, fontSize: 16)),
+                    style:
+                        TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
                 TextSpan(text: ' \n'),
                 TextSpan(
                     text: '\n- Dành tặng khách hàng thực hiện '
@@ -35,7 +38,7 @@ class DiscountInfo extends StatelessWidget {
                 TextSpan(text: ' tới 10/02/2022'),
                 TextSpan(
                     text:
-                    '\n\nChi tiết vui lòng xem tại: https://1.viettelpay.vn/g1k'),
+                        '\n\nChi tiết vui lòng xem tại: https://1.viettelpay.vn/g1k'),
               ],
             ),
           ),
@@ -60,7 +63,9 @@ class DiscountInfo extends StatelessWidget {
                     style: TextStyle(fontSize: 15),
                   ),
                   onPressed: () {
-                    //TODO: trackpoint
+                    // trackpoint
+                    trackEvent('exp_experience', 'BUTTON', 'USER', 'CLICK',
+                        args: {'identity': msisdn});
                     Navigator.pop(context);
                     showDialog<String>(
                       context: context,

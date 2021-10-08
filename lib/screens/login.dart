@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:exp_demo/models/user.dart';
+import 'package:exp_demo/common/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart';
@@ -50,7 +50,7 @@ class _LoginState extends State<Login> {
       prefs.setString("msisdn", _msisdn);
 
       // TODO: get config
-      await _getEXPConfigs(_msisdn);
+      // await _getEXPConfigs(_msisdn);
 
       Navigator.pushReplacementNamed(context, '/home', arguments: {
         'msisdn': _msisdn,
@@ -120,7 +120,11 @@ class _LoginState extends State<Login> {
                   ElevatedButton(
                     onPressed: () {
                       _handleSubmitted();
-                      // TODO: trackpoint
+                      // trackpoint
+                      trackEvent('exp_login', 'BUTTON', 'USER', 'CLICK', args: {
+                        'identity': _msisdn,
+                        'time_stamp': DateTime.now().millisecondsSinceEpoch
+                      });
                     },
                     child: (_isProcessing
                         ? const SizedBox(
