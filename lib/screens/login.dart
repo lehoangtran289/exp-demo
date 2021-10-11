@@ -1,9 +1,8 @@
-import 'dart:convert';
 
 import 'package:exp_demo/common/utils.dart';
+import 'package:exp_demo/services/tracking_event.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:http/http.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Login extends StatefulWidget {
@@ -14,29 +13,18 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  Map<String, dynamic>? _config; //TODO
+  late String _msisdn;
 
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   bool _isProcessing = false;
 
-  late String _msisdn;
-  Map<String, dynamic>? _config; //TODO
-
-  bool _isPhoneNoValid(String? phoneNo) {
-    if (phoneNo == null) return false;
-    final regExp = RegExp(r'^(84|0[3|5|7|8|9])+([0-9]{8})\b');
-    return regExp.hasMatch(phoneNo);
-  }
-
-  Future<Map<String, dynamic>> _getEXPConfigs(String msisdn) async {
-    try {
-      var response = await get(Uri.parse('')); //TODO: add url
-      Map<String, dynamic> data = jsonDecode(response.body); // json to map
-      print('get configs: $data');
-      return data;
-    } catch (ex) {
-      print('caught error $ex');
-      return {};
-    }
+  @override
+  void initState() {
+    setState(() {
+      super.initState();
+      _isProcessing = false;
+    });
   }
 
   void _handleSubmitted() async {
@@ -58,14 +46,6 @@ class _LoginState extends State<Login> {
       });
     }
     setState(() {
-      _isProcessing = false;
-    });
-  }
-
-  @override
-  void initState() {
-    setState(() {
-      super.initState();
       _isProcessing = false;
     });
   }
@@ -110,7 +90,7 @@ class _LoginState extends State<Login> {
                         _msisdn = value!;
                       },
                       validator: (String? value) {
-                        if (value!.isEmpty || !_isPhoneNoValid(value)) {
+                        if (value!.isEmpty || !isPhoneNoValid(value)) {
                           return 'Số điện thoại không hợp lệ';
                         }
                       },

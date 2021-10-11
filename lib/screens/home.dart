@@ -1,6 +1,6 @@
-import 'package:exp_demo/common/utils.dart';
+import 'package:exp_demo/services/tracking_event.dart';
 import 'package:exp_demo/models/user.dart';
-import 'package:exp_demo/screens/popup.dart';
+import 'package:exp_demo/screens/components/stateless/popup.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -66,7 +66,9 @@ class _HomeState extends State<Home> {
                       child: Image.asset('assets/popup.png'),
                       onPressed: () {
                         // trackpoint
-                        trackEvent('exp_popup', 'BUTTON', 'USER', 'CLICK');
+                        trackEvent('exp_popup', 'BUTTON', 'USER', 'CLICK', args: {
+                          'identity': _user.msisdn
+                        });
                         showPopup();
                       },
                     ),
@@ -81,7 +83,9 @@ class _HomeState extends State<Home> {
                       ),
                       onPressed: () {
                         // trackpoint
-                        trackEvent('exp_exit_popup', 'BUTTON', 'USER', 'CLICK');
+                        trackEvent('exp_exit_popup', 'BUTTON', 'USER', 'CLICK', args: {
+                          'identity': _user.msisdn
+                        });
                         Navigator.of(context, rootNavigator: true).pop();
                       },
                       child: const Text(

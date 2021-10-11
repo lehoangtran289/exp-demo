@@ -1,4 +1,4 @@
-import 'package:exp_demo/common/utils.dart';
+import 'package:exp_demo/services/tracking_event.dart';
 import 'package:flutter/material.dart';
 
 class DiscountInfo extends StatelessWidget {
