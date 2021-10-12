@@ -1,5 +1,8 @@
 
+import 'dart:developer';
+
 import 'package:exp_demo/common/utils.dart';
+import 'package:exp_demo/services/exp_config.dart';
 import 'package:exp_demo/services/tracking_event.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -13,7 +16,6 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
-  Map<String, dynamic>? _config; //TODO
   late String _msisdn;
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
@@ -33,16 +35,24 @@ class _LoginState extends State<Login> {
     });
     await Future.delayed(const Duration(seconds: 1));
     if (_formKey.currentState!.validate()) {
-      print(_msisdn);
+      log(_msisdn);
       SharedPreferences prefs = await SharedPreferences.getInstance();
-      prefs.setString("msisdn", _msisdn);
+      // prefs.setString("msisdn", _msisdn);
 
-      // TODO: get config
-      // await _getEXPConfigs(_msisdn);
+      // GET configs: note that a user could partake multiple exps
+      List<Map<String, dynamic>> configs = await getEXPConfigs(msisdn: _msisdn, productCode: 'VIETTELPAY');
 
+      List versionExps = configs.map((e) => e['versionCode']).toList();
+      log('$versionExps');
+      // List configs = response.map((e) => e['configs']).toList().expand((i) => i).toList();
+
+      // FORWARD configs to /home
       Navigator.pushReplacementNamed(context, '/home', arguments: {
         'msisdn': _msisdn,
-        // TODO: pass config
+        'event_value': {
+          'version_exp' : versionExps
+        },
+        'configs': configs
       });
     }
     setState(() {

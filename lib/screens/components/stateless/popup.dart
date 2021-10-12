@@ -3,11 +3,13 @@ import 'package:flutter/material.dart';
 
 class DiscountInfo extends StatelessWidget {
   final String msisdn;
+  final dynamic data;
 
-  DiscountInfo(this.msisdn);
+  DiscountInfo(this.msisdn, this.data);
 
   @override
   Widget build(BuildContext context) {
+    print(this.data);
     return Scaffold(
       body: SingleChildScrollView(
         child: Padding(
@@ -65,7 +67,10 @@ class DiscountInfo extends StatelessWidget {
                   onPressed: () {
                     // trackpoint
                     trackEvent('exp_experience', 'BUTTON', 'USER', 'CLICK',
-                        args: {'identity': msisdn});
+                        args: {
+                          'identity': msisdn,
+                          'event_value': data
+                        });
                     Navigator.pop(context);
                     showDialog<String>(
                       context: context,

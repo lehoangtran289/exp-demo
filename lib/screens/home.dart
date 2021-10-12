@@ -1,3 +1,6 @@
+import 'dart:developer';
+
+import 'package:exp_demo/services/exp_config.dart';
 import 'package:exp_demo/services/tracking_event.dart';
 import 'package:exp_demo/models/user.dart';
 import 'package:exp_demo/screens/components/stateless/popup.dart';
@@ -17,7 +20,7 @@ class _HomeState extends State<Home> {
   Map data = {};
   final User _user =
       User(name: "ViettelPay", balance: 100000, email: "viettelpay@digital.vn");
-  bool _shouldPopUpBeShown = true; // TODO
+  bool _shouldPopUpBeShown = true;
 
   void _handleLogout() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -40,7 +43,7 @@ class _HomeState extends State<Home> {
                   borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(20.0),
                       topRight: Radius.circular(20.0))),
-              child: DiscountInfo(_user.msisdn)),
+              child: DiscountInfo(_user.msisdn, data['event_value'])),
         );
       },
     );
@@ -67,7 +70,10 @@ class _HomeState extends State<Home> {
                       onPressed: () {
                         // trackpoint
                         trackEvent('exp_popup', 'BUTTON', 'USER', 'CLICK', args: {
-                          'identity': _user.msisdn
+                          'identity': _user.msisdn,
+                          'event_value': {
+                            'version_exp': data['event_value']['version_exp']
+                          }
                         });
                         showPopup();
                       },
@@ -84,7 +90,10 @@ class _HomeState extends State<Home> {
                       onPressed: () {
                         // trackpoint
                         trackEvent('exp_exit_popup', 'BUTTON', 'USER', 'CLICK', args: {
-                          'identity': _user.msisdn
+                          'identity': _user.msisdn,
+                          'event_value': {
+                            'version_exp': data['event_value']['version_exp']
+                          }
                         });
                         Navigator.of(context, rootNavigator: true).pop();
                       },
@@ -105,15 +114,18 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     try {
-      //TODO: catch config
-      data = ModalRoute.of(context)!.settings.arguments as Map;
-      print(data);
+      //CATCH config
+      data = data.isNotEmpty ? data : ModalRoute.of(context)!.settings.arguments as Map;
+      log('$data');
+      Map config = handleExpConfig(data['configs']);
+      log('here: $config');
       setState(() {
+        _shouldPopUpBeShown = config['Flag'];
         _user.msisdn = data['msisdn'];
+        _user.configs = data['configs'];
       });
-      // _user.configs = data['configs'];
     } catch (ex) {
-      print(ex);
+      log('$ex');
       _user.msisdn = "";
     }
 
