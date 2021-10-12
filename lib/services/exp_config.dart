@@ -22,14 +22,22 @@ Future<List<Map<String, dynamic>>> getEXPConfigs(
 }
 
 Map handleExpConfig(var exps) {
-  Map map = {};
+  Map result = {};
   for(var exp in exps) {
     String expCode = exp['experimentCode'];
     switch(expCode) {
       case "VIETTELPAY-111021091001": {
         for (var config in exp['configs']) {
           if (config['code'] == 'Flag') {
-            map['Flag'] = config['value'] == '1' ? true : false;
+            result['Flag'] = config['value'] == '1' ? true : false;
+          }
+        }
+      }
+      break;
+      case "VIETTELPAY-121021091025": {
+        for (var config in exp['configs']) {
+          if (config['code'] == 'Flag') {
+            result['Flag'] = config['value'] == '1' ? true : false;
           }
         }
       }
@@ -37,5 +45,5 @@ Map handleExpConfig(var exps) {
       default: {} break;
     }
   }
-  return map;
+  return result;
 }

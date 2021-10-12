@@ -122,7 +122,7 @@ class _HomeState extends State<Home> {
         log('here: ${_user.configs}');
         setState(() {
           _user.msisdn = data['msisdn'];
-          _shouldPopUpBeShown = _user.configs!['Flag'];
+          _shouldPopUpBeShown = _user.configs!['Flag']; //TODO: rf hardcode for 'code' field of each exp config
         });
       }
       setState(() {
