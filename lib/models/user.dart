@@ -5,7 +5,7 @@ class User {
   late String name;
   late num balance;
   late String email;
-  late List<Map<String, dynamic>> configs;
+  Map? configs;
 
   User({required this.name, required this.balance, required this.email});
 }

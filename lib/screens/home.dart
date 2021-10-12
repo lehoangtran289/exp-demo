@@ -117,16 +117,21 @@ class _HomeState extends State<Home> {
       //CATCH config
       data = data.isNotEmpty ? data : ModalRoute.of(context)!.settings.arguments as Map;
       log('$data');
-      Map config = handleExpConfig(data['configs']);
-      log('here: $config');
+      if (_user.configs == null) {  // render first time
+        _user.configs = handleExpConfig(data['configs']);
+        log('here: ${_user.configs}');
+        setState(() {
+          _user.msisdn = data['msisdn'];
+          _shouldPopUpBeShown = _user.configs!['Flag'];
+        });
+      }
       setState(() {
-        _shouldPopUpBeShown = config['Flag'];
         _user.msisdn = data['msisdn'];
-        _user.configs = data['configs'];
       });
+
     } catch (ex) {
       log('$ex');
-      _user.msisdn = "";
+      _user.msisdn = '';
     }
 
     // show popup
@@ -156,6 +161,12 @@ class _HomeState extends State<Home> {
         onPressed: () {
           setState(() {
             _user.balance += 100000;
+          });
+          trackEvent('exp_add', 'BUTTON', 'USER', 'CLICK', args: {
+            'identity': _user.msisdn,
+            'event_value': {
+              'version_exp': data['event_value']['version_exp']
+            }
           });
         },
         child: const Icon(Icons.add),
@@ -262,22 +273,22 @@ class _HomeState extends State<Home> {
                 ],
               ),
               const SizedBox(height: 30),
-              ElevatedButton(
-                style: TextButton.styleFrom(
-                  backgroundColor: Colors.red,
-                  primary: Colors.white,
-                  padding: const EdgeInsets.all(16.0),
-                  textStyle: const TextStyle(fontSize: 20),
-                  elevation: 0,
-                ),
-                onPressed: () {
-                  showPopup();
-                },
-                child: const Text(
-                  'Hiện popup',
-                  style: TextStyle(fontSize: 15),
-                ),
-              ),
+              // ElevatedButton(
+              //   style: TextButton.styleFrom(
+              //     backgroundColor: Colors.red,
+              //     primary: Colors.white,
+              //     padding: const EdgeInsets.all(16.0),
+              //     textStyle: const TextStyle(fontSize: 20),
+              //     elevation: 0,
+              //   ),
+              //   onPressed: () {
+              //     showPopup();
+              //   },
+              //   child: const Text(
+              //     'Hiện popup',
+              //     style: TextStyle(fontSize: 15),
+              //   ),
+              // ),
             ],
           ),
         ),

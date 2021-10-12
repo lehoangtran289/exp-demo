@@ -71,7 +71,9 @@ class DiscountInfo extends StatelessWidget {
                           'identity': msisdn,
                           'event_value': data
                         });
-                    Navigator.pop(context);
+                    var nav = Navigator.of(context);
+                    nav.pop();
+                    nav.pop();
                     showDialog<String>(
                       context: context,
                       barrierDismissible: true,

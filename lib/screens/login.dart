@@ -35,6 +35,7 @@ class _LoginState extends State<Login> {
     });
     await Future.delayed(const Duration(seconds: 1));
     if (_formKey.currentState!.validate()) {
+      _msisdn = _msisdn[0] == '0' ? "84" + _msisdn.substring(1) : _msisdn;
       log(_msisdn);
       SharedPreferences prefs = await SharedPreferences.getInstance();
       // prefs.setString("msisdn", _msisdn);
